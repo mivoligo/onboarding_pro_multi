@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onboarding_pro_multi/onboarding_page.dart';
 import 'package:onboarding_pro_multi/strings.dart';
 import 'package:onboarding_pro_multi/widgets/fancy_text.dart';
 
@@ -16,8 +17,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        textButtonTheme: const TextButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor: WidgetStatePropertyAll(Color(0xffb2b2b2)),
+          ),
+        ),
+        filledButtonTheme: const FilledButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(Color(0xff0568b0)),
+            side: WidgetStatePropertyAll(BorderSide(color: Color(0xffffffff))),
+          ),
+        ),
       ),
-      home: const Home(),
+      home: const OnboardingPage(),
     );
   }
 }
@@ -27,12 +39,12 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Column(
           children: [
             FancyText(text: creativeTime),
-            FancyText(text: joinEvents),
+            FancyText(text: events),
             FancyText(text: newPlaces),
             FancyText(text: reminders),
             FancyText(text: upToDate),
