@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onboarding_pro_multi/colors.dart';
 import 'package:onboarding_pro_multi/strings.dart';
-import 'package:onboarding_pro_multi/widgets/fancy_text.dart';
-import 'package:onboarding_pro_multi/widgets/navigation_buttons.dart';
+import 'package:onboarding_pro_multi/widgets/navigation_part.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -22,46 +21,37 @@ class _OnboardingPageState extends State<OnboardingPage> {
   ];
   int currentStep = 0;
 
+  int get lastStep => steps.length - 1;
+
   @override
   Widget build(BuildContext context) {
-    final mainTextStyle = Theme.of(context).textTheme.titleLarge;
     return Scaffold(
-      backgroundColor: const Color(0xFF3e6fa7),
-      body: Center(
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+      backgroundColor: const Color(backgroundColor),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isWideLayout = constraints.maxWidth > constraints.maxHeight;
+          return Row(
             children: [
-              FancyText(
-                text: steps[currentStep],
-                mainStyle:
-                    mainTextStyle?.copyWith(color: const Color(mainTextColor)),
-                fancyStyle: mainTextStyle?.copyWith(
-                  color: const Color(mainTextColor),
-                  fontWeight: FontWeight.bold,
+              if (isWideLayout) const Spacer(),
+              Expanded(
+                child: NavigationPart(
+                  description: steps[currentStep],
+                  onNextPressed: toNextStep,
+                  onSkipPressed: skipOnboarding,
+                  onStartPressed: resetProgress,
+                  hasMoreSteps: currentStep < lastStep,
+                  isInWideLayout: isWideLayout,
                 ),
               ),
-              Expanded(child: Text(currentStep.toString())),
-              if (currentStep < steps.length - 1)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SkipButton(label: buttonSkip, onPressed: skipOnboarding),
-                    ForwardButton(label: buttonForward, onPressed: toNextStep),
-                  ],
-                )
-              else
-                StartButton(label: buttonStart, onPressed: resetProgress),
-              const SizedBox(height: 64),
             ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }
 
   void toNextStep() {
-    if (currentStep < steps.length - 1) {
+    if (currentStep < lastStep) {
       setState(() {
         currentStep++;
       });
@@ -76,7 +66,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   void skipOnboarding() {
     setState(() {
-      currentStep = steps.length - 1;
+      currentStep = lastStep;
     });
   }
 }
