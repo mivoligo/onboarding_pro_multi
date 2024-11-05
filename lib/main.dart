@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onboarding_pro_multi/colors.dart';
 import 'package:onboarding_pro_multi/onboarding_page.dart';
 import 'package:onboarding_pro_multi/strings.dart';
 import 'package:onboarding_pro_multi/widgets/fancy_text.dart';
@@ -15,17 +16,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         textButtonTheme: const TextButtonThemeData(
           style: ButtonStyle(
-            foregroundColor: WidgetStatePropertyAll(Color(0xffb2b2b2)),
+            foregroundColor: WidgetStatePropertyAll(Color(textButtonColor)),
           ),
         ),
         filledButtonTheme: const FilledButtonThemeData(
           style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(Color(0xff0568b0)),
-            side: WidgetStatePropertyAll(BorderSide(color: Color(0xffffffff))),
+            foregroundColor:
+                WidgetStatePropertyAll(Color(filledButtonForegroundColor)),
+            backgroundColor:
+                WidgetStatePropertyAll(Color(filledButtonBackgroundColor)),
+            side: WidgetStatePropertyAll(
+              BorderSide(color: Color(filledButtonForegroundColor)),
+            ),
           ),
         ),
       ),
