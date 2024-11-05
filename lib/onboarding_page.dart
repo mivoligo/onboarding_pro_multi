@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:onboarding_pro_multi/colors.dart';
 import 'package:onboarding_pro_multi/strings.dart';
 import 'package:onboarding_pro_multi/widgets/fancy_text.dart';
+import 'package:onboarding_pro_multi/widgets/navigation_buttons.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -45,21 +46,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    TextButton(
-                      onPressed: skipOnboarding,
-                      child: const Text(buttonSkip),
-                    ),
-                    FilledButton(
-                      onPressed: toNextStep,
-                      child: const Text(buttonForward),
-                    ),
+                    SkipButton(label: buttonSkip, onPressed: skipOnboarding),
+                    ForwardButton(label: buttonForward, onPressed: toNextStep),
                   ],
                 )
               else
-                FilledButton(
-                  onPressed: resetProgress,
-                  child: const Text(buttonStart),
-                ),
+                StartButton(label: buttonStart, onPressed: resetProgress),
               const SizedBox(height: 64),
             ],
           ),
