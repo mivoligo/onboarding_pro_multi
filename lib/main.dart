@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onboarding_pro_multi/colors.dart';
 import 'package:onboarding_pro_multi/onboarding_page.dart';
-import 'package:onboarding_pro_multi/strings.dart';
-import 'package:onboarding_pro_multi/widgets/fancy_text.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,28 +33,6 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: const OnboardingPage(),
-    );
-  }
-}
-
-class Home extends StatelessWidget {
-  const Home({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            FancyText(text: creativeTime),
-            FancyText(text: events),
-            FancyText(text: newPlaces),
-            FancyText(text: reminders),
-            FancyText(text: upToDate),
-            FancyText(text: rhythm),
-          ],
-        ),
-      ),
     );
   }
 }

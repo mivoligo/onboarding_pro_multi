@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onboarding_pro_multi/colors.dart';
 import 'package:onboarding_pro_multi/strings.dart';
 import 'package:onboarding_pro_multi/widgets/fancy_text.dart';
 
@@ -22,30 +23,46 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final mainTextStyle = Theme.of(context).textTheme.titleLarge;
     return Scaffold(
-      backgroundColor: Color(0xFF3e6fa7),
+      backgroundColor: const Color(0xFF3e6fa7),
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            FancyText(text: steps[currentStep]),
-            Expanded(child: Text(currentStep.toString())),
-            if (currentStep < steps.length - 1)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                      onPressed: skipOnboarding, child: Text(buttonSkip)),
-                  FilledButton(
-                    onPressed: toNextStep,
-                    child: Text(buttonForward),
-                  )
-                ],
-              )
-            else
-              FilledButton(onPressed: resetProgress, child: Text(buttonStart)),
-            SizedBox(height: 64),
-          ],
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              FancyText(
+                text: steps[currentStep],
+                mainStyle:
+                    mainTextStyle?.copyWith(color: const Color(mainTextColor)),
+                fancyStyle: mainTextStyle?.copyWith(
+                  color: const Color(mainTextColor),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Expanded(child: Text(currentStep.toString())),
+              if (currentStep < steps.length - 1)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextButton(
+                      onPressed: skipOnboarding,
+                      child: const Text(buttonSkip),
+                    ),
+                    FilledButton(
+                      onPressed: toNextStep,
+                      child: const Text(buttonForward),
+                    ),
+                  ],
+                )
+              else
+                FilledButton(
+                  onPressed: resetProgress,
+                  child: const Text(buttonStart),
+                ),
+              const SizedBox(height: 64),
+            ],
+          ),
         ),
       ),
     );

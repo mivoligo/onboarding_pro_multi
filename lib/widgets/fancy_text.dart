@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
 class FancyText extends StatelessWidget {
-  const FancyText({super.key, required this.text});
+  const FancyText({
+    required this.text,
+    required this.mainStyle,
+    required this.fancyStyle,
+    super.key,
+  });
 
   final String text;
+  final TextStyle? mainStyle;
+  final TextStyle? fancyStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +23,15 @@ class FancyText extends StatelessWidget {
             i.isOdd
                 ? TextSpan(
                     text: chunks[i],
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: fancyStyle,
                   )
-                : TextSpan(text: chunks[i]),
+                : TextSpan(
+                    text: chunks[i],
+                    style: mainStyle,
+                  ),
         ],
       ),
+      textAlign: TextAlign.center,
     );
   }
 }
