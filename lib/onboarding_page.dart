@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onboarding_pro_multi/colors.dart';
 import 'package:onboarding_pro_multi/strings.dart';
+import 'package:onboarding_pro_multi/widgets/illustration_part.dart';
 import 'package:onboarding_pro_multi/widgets/navigation_part.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -23,18 +24,46 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   int get lastStep => steps.length - 1;
 
+  final pageController = PageController();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(backgroundColor),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final isWideLayout = constraints.maxWidth > constraints.maxHeight;
-          return Row(
-            children: [
-              if (isWideLayout) const Spacer(),
-              Expanded(
-                child: NavigationPart(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: const Color(backgroundColor),
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            final isWideLayout = constraints.maxWidth > constraints.maxHeight;
+            return Stack(
+              children: [
+                IllustrationPart(
+                  pageController: pageController,
+                  onPageChanged: (pageNumber) {
+                    print('pageNumber = $pageNumber');
+                    setState(() {
+                      currentStep = pageNumber;
+                    });
+                    // toNextStep();
+                  },
+                  children: steps
+                      .map(
+                        (e) => Container(
+                          color: Colors.redAccent
+                              .withAlpha(255 ~/ (steps.indexOf(e) + 1)),
+                          child: Center(
+                            child: Text(
+                              steps.indexOf(e).toString(),
+                              style: const TextStyle(
+                                fontSize: 64,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+                NavigationPart(
                   description: steps[currentStep],
                   onNextPressed: toNextStep,
                   onSkipPressed: skipOnboarding,
@@ -42,18 +71,23 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   hasMoreSteps: currentStep < lastStep,
                   isInWideLayout: isWideLayout,
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
   void toNextStep() {
     if (currentStep < lastStep) {
+      currentStep++;
       setState(() {
-        currentStep++;
+        pageController.animateToPage(
+          currentStep,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
       });
     }
   }
@@ -61,12 +95,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
   void resetProgress() {
     setState(() {
       currentStep = 0;
+      pageController.jumpToPage(currentStep);
     });
   }
 
   void skipOnboarding() {
     setState(() {
       currentStep = lastStep;
+      pageController.jumpToPage(currentStep);
     });
   }
 }
