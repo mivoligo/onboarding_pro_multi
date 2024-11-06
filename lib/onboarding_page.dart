@@ -36,40 +36,51 @@ class _OnboardingPageState extends State<OnboardingPage> {
             final isWideLayout = constraints.maxWidth > constraints.maxHeight;
             return Stack(
               children: [
-                IllustrationPart(
-                  pageController: pageController,
-                  onPageChanged: (pageNumber) {
-                    print('pageNumber = $pageNumber');
-                    setState(() {
-                      currentStep = pageNumber;
-                    });
-                    // toNextStep();
-                  },
-                  children: steps
-                      .map(
-                        (e) => Container(
-                          color: Colors.redAccent
-                              .withAlpha(255 ~/ (steps.indexOf(e) + 1)),
-                          child: Center(
-                            child: Text(
-                              steps.indexOf(e).toString(),
-                              style: const TextStyle(
-                                fontSize: 64,
-                                color: Colors.white70,
+                Positioned(
+                  width: isWideLayout
+                      ? constraints.maxWidth / 2
+                      : constraints.maxWidth,
+                  height: constraints.maxHeight,
+                  child: IllustrationPart(
+                    pageController: pageController,
+                    onPageChanged: (pageNumber) {
+                      setState(() {
+                        currentStep = pageNumber;
+                      });
+                    },
+                    children: steps
+                        .map(
+                          (e) => Container(
+                            color: Colors.redAccent
+                                .withAlpha(255 ~/ (steps.indexOf(e) + 1)),
+                            child: Center(
+                              child: Text(
+                                steps.indexOf(e).toString(),
+                                style: const TextStyle(
+                                  fontSize: 64,
+                                  color: Colors.white70,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
-                      .toList(),
+                        )
+                        .toList(),
+                  ),
                 ),
-                NavigationPart(
-                  description: steps[currentStep],
-                  onNextPressed: toNextStep,
-                  onSkipPressed: skipOnboarding,
-                  onStartPressed: resetProgress,
-                  hasMoreSteps: currentStep < lastStep,
-                  isInWideLayout: isWideLayout,
+                Positioned(
+                  left: isWideLayout ? constraints.maxWidth / 2 : 0,
+                  width: isWideLayout
+                      ? constraints.maxWidth / 2
+                      : constraints.maxWidth,
+                  height: constraints.maxHeight,
+                  child: NavigationPart(
+                    description: steps[currentStep],
+                    onNextPressed: toNextStep,
+                    onSkipPressed: skipOnboarding,
+                    onStartPressed: resetProgress,
+                    hasMoreSteps: currentStep < lastStep,
+                    isInWideLayout: isWideLayout,
+                  ),
                 ),
               ],
             );
