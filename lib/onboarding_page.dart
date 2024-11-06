@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onboarding_pro_multi/colors.dart';
+import 'package:onboarding_pro_multi/home_page.dart';
 import 'package:onboarding_pro_multi/strings.dart';
 import 'package:onboarding_pro_multi/widgets/illustration_part.dart';
 import 'package:onboarding_pro_multi/widgets/navigation_part.dart';
@@ -76,8 +77,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   child: NavigationPart(
                     description: steps[currentStep],
                     onNextPressed: toNextStep,
-                    onSkipPressed: skipOnboarding,
-                    onStartPressed: resetProgress,
+                    onSkipPressed: toMainView,
+                    onStartPressed: toMainView,
                     hasMoreSteps: currentStep < lastStep,
                     isInWideLayout: isWideLayout,
                   ),
@@ -103,17 +104,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
     }
   }
 
-  void resetProgress() {
-    setState(() {
-      currentStep = 0;
-      pageController.jumpToPage(currentStep);
-    });
-  }
-
-  void skipOnboarding() {
-    setState(() {
-      currentStep = lastStep;
-      pageController.jumpToPage(currentStep);
-    });
+  void toMainView() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const HomePage(),
+      ),
+    );
   }
 }
