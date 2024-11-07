@@ -53,7 +53,10 @@ class NavigationPart extends StatelessWidget {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      SkipButton(label: buttonSkip, onPressed: onSkipPressed),
+                      SkipButton(
+                        label: buttonSkip,
+                        onPressed: onSkipPressed,
+                      ),
                       ForwardButton(
                         label: buttonForward,
                         onPressed: onNextPressed,

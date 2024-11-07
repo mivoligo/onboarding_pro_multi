@@ -25,7 +25,19 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   int get lastStep => steps.length - 1;
 
-  final pageController = PageController();
+  PageController? pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    pageController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +107,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     if (currentStep < lastStep) {
       currentStep++;
       setState(() {
-        pageController.animateToPage(
+        pageController?.animateToPage(
           currentStep,
           duration: const Duration(milliseconds: 300),
           curve: Curves.ease,
