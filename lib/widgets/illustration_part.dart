@@ -75,7 +75,7 @@ class IllustrationPart extends StatelessWidget {
         itemCount: 6,
         clipBehavior: Clip.hardEdge,
         itemBuilder: (context, index) {
-          return PartOne(
+          return SinglePage(
             progress: index,
             imageAsset: imageAssets[index],
             foregroundImage: foregroundImages[index]!,
@@ -87,8 +87,8 @@ class IllustrationPart extends StatelessWidget {
   }
 }
 
-class PartOne extends StatelessWidget {
-  const PartOne({
+class SinglePage extends StatefulWidget {
+  const SinglePage({
     required this.progress,
     required this.foregroundImage,
     required this.backgroundImage,
@@ -102,20 +102,57 @@ class PartOne extends StatelessWidget {
   final String backgroundImage;
 
   @override
+  State<SinglePage> createState() => _SinglePageState();
+}
+
+class _SinglePageState extends State<SinglePage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  static const decors = [
+    'cloud-big.png',
+    'cloud-small.png',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Stack(
           children: [
-            if (imageAsset != null)
+            if (widget.imageAsset != null)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Image.asset(
-                  'assets/images/$imageAsset',
+                  'assets/images/${widget.imageAsset}',
                   fit: BoxFit.fitWidth,
                   width: double.infinity,
                 ),
               ),
+            ...decors.indexed.map(
+              (e) {
+                return SingleDecorAnimatedWidget(
+                  listenable: _animationController,
+                  index: e.$1,
+                  child: Image.asset('assets/images/decoration/${e.$2}'),
+                );
+              },
+            ),
             TweenAnimationBuilder(
               tween: Tween<double>(
                 begin: -constraints.maxWidth,
@@ -130,7 +167,7 @@ class PartOne extends StatelessWidget {
               },
               child: Align(
                 alignment: Alignment.center,
-                child: Image.asset('assets/images/$backgroundImage'),
+                child: Image.asset('assets/images/${widget.backgroundImage}'),
               ),
             ),
             TweenAnimationBuilder(
@@ -148,12 +185,42 @@ class PartOne extends StatelessWidget {
               },
               child: Align(
                 alignment: Alignment.center,
-                child: Image.asset('assets/images/$foregroundImage'),
+                child: Image.asset('assets/images/${widget.foregroundImage}'),
               ),
             ),
           ],
         );
       },
+    );
+  }
+}
+
+class SingleDecorAnimatedWidget extends AnimatedWidget {
+  SingleDecorAnimatedWidget({
+    required this.child,
+    required int index,
+    required super.listenable,
+    super.key,
+  }) : scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: listenable as Animation<double>,
+            curve: Interval(
+              0.5 * index,
+              0.5 + 0.1 * index,
+              curve: Curves.ease,
+            ),
+          ),
+        );
+
+  final Widget child;
+  final Animation<double> scaleAnimation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.scale(
+      scale: scaleAnimation.value,
+      alignment: Alignment.center,
+      child: child,
     );
   }
 }
