@@ -53,7 +53,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   width: isWideLayout
                       ? constraints.maxWidth / 2
                       : constraints.maxWidth,
-                  height: constraints.maxHeight,
+                  // height: constraints.maxHeight,
+                  bottom: isWideLayout ? 0 : 100,
+                  top: 0,
                   child: IllustrationPart(
                     pageController: pageController,
                     onPageChanged: (pageNumber) {
@@ -61,23 +63,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         currentStep = pageNumber;
                       });
                     },
-                    children: steps
-                        .map(
-                          (e) => Container(
-                            color: Colors.redAccent
-                                .withAlpha(255 ~/ (steps.indexOf(e) + 1)),
-                            child: Center(
-                              child: Text(
-                                steps.indexOf(e).toString(),
-                                style: const TextStyle(
-                                  fontSize: 64,
-                                  color: Colors.white70,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                        .toList(),
+                    currentPage: currentStep,
                   ),
                 ),
                 Positioned(

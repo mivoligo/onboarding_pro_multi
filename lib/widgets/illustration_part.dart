@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:onboarding_pro_multi/colors.dart';
 
 class IllustrationPart extends StatelessWidget {
   const IllustrationPart({
     required this.pageController,
-    required this.children,
     required this.onPageChanged,
+    required this.currentPage,
     super.key,
   });
 
   final PageController? pageController;
-  final List<Widget> children;
   final Function(int)? onPageChanged;
+  final int currentPage;
 
   static const imageAssets = {
     0: 'line-0.png',
@@ -36,21 +37,40 @@ class IllustrationPart extends StatelessWidget {
     5: '5-b.png',
   };
 
+  static const gradientOffset = {
+    0: Alignment.center,
+    1: Alignment(0.25, 0.25),
+    2: Alignment.center,
+    3: Alignment(0.25, 0),
+    4: Alignment.center,
+    5: Alignment(0.25, 0),
+  };
+
   @override
   Widget build(BuildContext context) {
-    return PageView.builder(
-      controller: pageController,
-      onPageChanged: onPageChanged,
-      itemCount: 6,
-      itemBuilder: (context, index) {
-        return PartOne(
-          progress: index,
-          imageAsset: imageAssets[index],
-          foregroundImage: foregroundImages[index]!,
-          backgroundImage: backgroundImages[index]!,
-        );
-      },
-      // children: [...children.sublist(0, children.length - 1), PartOne(progress: 4  ?? 0,)],
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 400),
+      decoration: BoxDecoration(
+        gradient: RadialGradient(
+          colors: [Colors.white38, const Color(backgroundColor).withAlpha(100)],
+          center: gradientOffset[currentPage]!,
+          radius: 0.4,
+        ),
+      ),
+      child: PageView.builder(
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        itemCount: 6,
+        clipBehavior: Clip.hardEdge,
+        itemBuilder: (context, index) {
+          return PartOne(
+            progress: index,
+            imageAsset: imageAssets[index],
+            foregroundImage: foregroundImages[index]!,
+            backgroundImage: backgroundImages[index]!,
+          );
+        },
+      ),
     );
   }
 }
@@ -97,7 +117,7 @@ class PartOne extends StatelessWidget {
                 );
               },
               child: Align(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.center,
                 child: Image.asset('assets/images/$backgroundImage'),
               ),
             ),
@@ -115,7 +135,7 @@ class PartOne extends StatelessWidget {
                 );
               },
               child: Align(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.center,
                 child: Image.asset('assets/images/$foregroundImage'),
               ),
             ),
