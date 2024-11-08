@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:onboarding_pro_multi/colors.dart';
 import 'package:onboarding_pro_multi/step_model.dart';
@@ -42,14 +44,12 @@ class IllustrationPart extends StatelessWidget {
       child: PageView.builder(
         controller: pageController,
         onPageChanged: onPageChanged,
-        itemCount: 6,
+        itemCount: stepsList.length,
         clipBehavior: Clip.hardEdge,
         itemBuilder: (context, index) {
           return SinglePage(
             progress: index,
-            lineImage: stepsList[index].lineImage,
-            foregroundImage: stepsList[index].foregroundImage,
-            backgroundImage: stepsList[index].backgroundImage,
+            step: stepsList[index],
           );
         },
       ),
@@ -60,16 +60,12 @@ class IllustrationPart extends StatelessWidget {
 class SinglePage extends StatefulWidget {
   const SinglePage({
     required this.progress,
-    required this.foregroundImage,
-    required this.backgroundImage,
-    this.lineImage,
+    required this.step,
     super.key,
   });
 
   final int progress;
-  final String? lineImage;
-  final String foregroundImage;
-  final String backgroundImage;
+  final SingleStep step;
 
   @override
   State<SinglePage> createState() => _SinglePageState();
@@ -79,17 +75,12 @@ class _SinglePageState extends State<SinglePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
-  static const decors = [
-    'cloud-big.png',
-    'cloud-small.png',
-  ];
-
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 2000),
     )..forward();
   }
 
@@ -104,24 +95,24 @@ class _SinglePageState extends State<SinglePage>
     return LayoutBuilder(
       builder: (context, constraints) {
         return Stack(
+          alignment: Alignment.center,
           children: [
-            if (widget.lineImage != null)
+            if (widget.step.lineImage != null)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Image.asset(
-                  'assets/images/${widget.lineImage}',
+                  'assets/images/${widget.step.lineImage}',
                   fit: BoxFit.fitWidth,
                   width: double.infinity,
                 ),
               ),
-            ...decors.indexed.map(
-              (e) {
-                return SingleDecorAnimatedWidget(
-                  listenable: _animationController,
-                  index: e.$1,
-                  child: Image.asset('assets/images/decoration/${e.$2}'),
-                );
-              },
+            Positioned(
+              width: min(constraints.maxWidth, constraints.maxHeight),
+              height: min(constraints.maxWidth, constraints.maxHeight),
+              child: DecorImages(
+                decorList: widget.step.decorImages,
+                animation: _animationController,
+              ),
             ),
             TweenAnimationBuilder(
               tween: Tween<double>(
@@ -137,7 +128,8 @@ class _SinglePageState extends State<SinglePage>
               },
               child: Align(
                 alignment: Alignment.center,
-                child: Image.asset('assets/images/${widget.backgroundImage}'),
+                child:
+                    Image.asset('assets/images/${widget.step.backgroundImage}'),
               ),
             ),
             TweenAnimationBuilder(
@@ -155,7 +147,8 @@ class _SinglePageState extends State<SinglePage>
               },
               child: Align(
                 alignment: Alignment.center,
-                child: Image.asset('assets/images/${widget.foregroundImage}'),
+                child:
+                    Image.asset('assets/images/${widget.step.foregroundImage}'),
               ),
             ),
           ],
@@ -169,15 +162,16 @@ class SingleDecorAnimatedWidget extends AnimatedWidget {
   SingleDecorAnimatedWidget({
     required this.child,
     required int index,
+    required int listLength,
     required super.listenable,
     super.key,
   }) : scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: listenable as Animation<double>,
             curve: Interval(
-              0.5 * index,
-              0.5 + 0.1 * index,
-              curve: Curves.ease,
+              0.5 / (listLength - 1) * index,
+              0.5 + 0.5 / (listLength - 1) * index,
+              curve: Curves.bounceOut,
             ),
           ),
         );
@@ -191,6 +185,36 @@ class SingleDecorAnimatedWidget extends AnimatedWidget {
       scale: scaleAnimation.value,
       alignment: Alignment.center,
       child: child,
+    );
+  }
+}
+
+class DecorImages extends StatelessWidget {
+  const DecorImages({
+    required this.decorList,
+    required this.animation,
+    super.key,
+  });
+
+  final List<Decor> decorList;
+  final Animation<double> animation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: decorList
+          .map(
+            (decor) => Align(
+              alignment: decor.alignment,
+              child: SingleDecorAnimatedWidget(
+                listenable: animation,
+                index: decorList.indexOf(decor),
+                listLength: decorList.length,
+                child: Image.asset('assets/images/decoration/${decor.image}'),
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 }

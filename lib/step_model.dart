@@ -21,9 +21,9 @@ class SingleStep {
 class Decor {
   const Decor({
     required this.image,
-    required this.offset,
+    required this.alignment,
   });
 
   final String image;
-  final Offset offset;
+  final Alignment alignment;
 }
