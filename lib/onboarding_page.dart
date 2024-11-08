@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onboarding_pro_multi/colors.dart';
 import 'package:onboarding_pro_multi/home_page.dart';
-import 'package:onboarding_pro_multi/strings.dart';
+import 'package:onboarding_pro_multi/steps.dart';
 import 'package:onboarding_pro_multi/widgets/illustration_part.dart';
 import 'package:onboarding_pro_multi/widgets/navigation_part.dart';
 
@@ -13,14 +13,8 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
-  final steps = [
-    creativeTime,
-    events,
-    newPlaces,
-    reminders,
-    upToDate,
-    rhythm,
-  ];
+  static const steps = stepsList;
+
   int currentStep = 0;
 
   int get lastStep => steps.length - 1;
@@ -53,7 +47,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   width: isWideLayout
                       ? constraints.maxWidth / 2
                       : constraints.maxWidth,
-                  // height: constraints.maxHeight,
                   bottom: isWideLayout ? 0 : 100,
                   top: 0,
                   child: IllustrationPart(
@@ -64,6 +57,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       });
                     },
                     currentPage: currentStep,
+                    stepsList: steps,
                   ),
                 ),
                 Positioned(
@@ -73,7 +67,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       : constraints.maxWidth,
                   height: constraints.maxHeight,
                   child: NavigationPart(
-                    description: steps[currentStep],
+                    description: steps[currentStep].label,
                     onNextPressed: toNextStep,
                     onSkipPressed: toMainView,
                     onStartPressed: toMainView,
