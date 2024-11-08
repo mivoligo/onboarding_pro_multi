@@ -48,15 +48,27 @@ class IllustrationPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 400),
-      decoration: BoxDecoration(
-        gradient: RadialGradient(
-          colors: [Colors.white38, const Color(backgroundColor).withAlpha(100)],
-          center: gradientOffset[currentPage]!,
-          radius: 0.4,
-        ),
+    return TweenAnimationBuilder(
+      tween: AlignmentTween(
+        begin: gradientOffset[currentPage]!,
+        end: gradientOffset[currentPage]!,
       ),
+      duration: const Duration(milliseconds: 400),
+      builder: (context, value, child) {
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              colors: [
+                Colors.white38,
+                const Color(backgroundColor).withAlpha(100),
+              ],
+              center: value,
+              radius: 0.4,
+            ),
+          ),
+          child: child,
+        );
+      },
       child: PageView.builder(
         controller: pageController,
         onPageChanged: onPageChanged,
