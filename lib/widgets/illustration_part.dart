@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:onboarding_pro_multi/colors.dart';
 import 'package:onboarding_pro_multi/step_model.dart';
+import 'package:onboarding_pro_multi/widgets/decor_images_animation.dart';
 
 class IllustrationPart extends StatelessWidget {
   const IllustrationPart({
@@ -45,11 +46,9 @@ class IllustrationPart extends StatelessWidget {
         controller: pageController,
         onPageChanged: onPageChanged,
         itemCount: stepsList.length,
-        clipBehavior: Clip.hardEdge,
         itemBuilder: (context, index) {
-          return SinglePage(
-            progress: index,
-            step: stepsList[index],
+          return _SinglePage(
+            currentStep: stepsList[index],
           );
         },
       ),
@@ -57,21 +56,18 @@ class IllustrationPart extends StatelessWidget {
   }
 }
 
-class SinglePage extends StatefulWidget {
-  const SinglePage({
-    required this.progress,
-    required this.step,
-    super.key,
+class _SinglePage extends StatefulWidget {
+  const _SinglePage({
+    required this.currentStep,
   });
 
-  final int progress;
-  final SingleStep step;
+  final SingleStep currentStep;
 
   @override
-  State<SinglePage> createState() => _SinglePageState();
+  State<_SinglePage> createState() => _SinglePageState();
 }
 
-class _SinglePageState extends State<SinglePage>
+class _SinglePageState extends State<_SinglePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
@@ -80,7 +76,7 @@ class _SinglePageState extends State<SinglePage>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 2500),
     )..forward();
   }
 
@@ -97,11 +93,11 @@ class _SinglePageState extends State<SinglePage>
         return Stack(
           alignment: Alignment.center,
           children: [
-            if (widget.step.lineImage != null)
+            if (widget.currentStep.lineImage != null)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Image.asset(
-                  'assets/images/${widget.step.lineImage}',
+                  'assets/images/${widget.currentStep.lineImage}',
                   fit: BoxFit.fitWidth,
                   width: double.infinity,
                 ),
@@ -110,7 +106,7 @@ class _SinglePageState extends State<SinglePage>
               width: min(constraints.maxWidth, constraints.maxHeight),
               height: min(constraints.maxWidth, constraints.maxHeight),
               child: DecorImages(
-                decorList: widget.step.decorImages,
+                decorList: widget.currentStep.decorImages,
                 animation: _animationController,
               ),
             ),
@@ -119,7 +115,8 @@ class _SinglePageState extends State<SinglePage>
                 begin: -constraints.maxWidth,
                 end: 0,
               ),
-              duration: const Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 700),
+              curve: Curves.easeOut,
               builder: (context, value, child) {
                 return Transform.translate(
                   offset: Offset(value, 0),
@@ -128,8 +125,9 @@ class _SinglePageState extends State<SinglePage>
               },
               child: Align(
                 alignment: Alignment.center,
-                child:
-                    Image.asset('assets/images/${widget.step.backgroundImage}'),
+                child: Image.asset(
+                  'assets/images/${widget.currentStep.backgroundImage}',
+                ),
               ),
             ),
             TweenAnimationBuilder(
@@ -137,8 +135,8 @@ class _SinglePageState extends State<SinglePage>
                 begin: constraints.maxWidth,
                 end: 0,
               ),
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.ease,
+              duration: const Duration(milliseconds: 800),
+              curve: Curves.easeOut,
               builder: (context, value, child) {
                 return Transform.translate(
                   offset: Offset(value, 0),
@@ -147,74 +145,14 @@ class _SinglePageState extends State<SinglePage>
               },
               child: Align(
                 alignment: Alignment.center,
-                child:
-                    Image.asset('assets/images/${widget.step.foregroundImage}'),
+                child: Image.asset(
+                  'assets/images/${widget.currentStep.foregroundImage}',
+                ),
               ),
             ),
           ],
         );
       },
-    );
-  }
-}
-
-class SingleDecorAnimatedWidget extends AnimatedWidget {
-  SingleDecorAnimatedWidget({
-    required this.child,
-    required int index,
-    required int listLength,
-    required super.listenable,
-    super.key,
-  }) : scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: listenable as Animation<double>,
-            curve: Interval(
-              0.5 / (listLength - 1) * index,
-              0.5 + 0.5 / (listLength - 1) * index,
-              curve: Curves.bounceOut,
-            ),
-          ),
-        );
-
-  final Widget child;
-  final Animation<double> scaleAnimation;
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: scaleAnimation.value,
-      alignment: Alignment.center,
-      child: child,
-    );
-  }
-}
-
-class DecorImages extends StatelessWidget {
-  const DecorImages({
-    required this.decorList,
-    required this.animation,
-    super.key,
-  });
-
-  final List<Decor> decorList;
-  final Animation<double> animation;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: decorList
-          .map(
-            (decor) => Align(
-              alignment: decor.alignment,
-              child: SingleDecorAnimatedWidget(
-                listenable: animation,
-                index: decorList.indexOf(decor),
-                listLength: decorList.length,
-                child: Image.asset('assets/images/decoration/${decor.image}'),
-              ),
-            ),
-          )
-          .toList(),
     );
   }
 }
