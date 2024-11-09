@@ -7,13 +7,11 @@ class SingleStep {
     required this.backgroundImage,
     required this.backgroundGradientAlignment,
     required this.decorImages,
-    this.lineImage,
   });
 
   final String label;
   final String foregroundImage;
   final String backgroundImage;
-  final String? lineImage;
   final Alignment backgroundGradientAlignment;
   final List<Decor> decorImages;
 }

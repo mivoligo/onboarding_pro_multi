@@ -7,7 +7,6 @@ const stepsList = [
     label: creativeTime,
     foregroundImage: '0-f.png',
     backgroundImage: '0-b.png',
-    lineImage: 'line-0.png',
     backgroundGradientAlignment: Alignment(0, -0.2),
     decorImages: [
       Decor(image: 'cross.png', alignment: Alignment(-0.75, 0.35)),
@@ -28,7 +27,6 @@ const stepsList = [
     label: events,
     foregroundImage: '1-f.png',
     backgroundImage: '1-b.png',
-    lineImage: 'line-1.png',
     backgroundGradientAlignment: Alignment(0.25, 0.2),
     decorImages: [
       Decor(image: 'dots-small.png', alignment: Alignment(-0.7, 0.9)),
@@ -50,7 +48,6 @@ const stepsList = [
     label: newPlaces,
     foregroundImage: '2-f.png',
     backgroundImage: '2-b.png',
-    lineImage: 'line-2.png',
     backgroundGradientAlignment: Alignment.center,
     decorImages: [
       Decor(image: 'location.png', alignment: Alignment(-0.85, -0.2)),
@@ -96,7 +93,6 @@ const stepsList = [
     label: rhythm,
     foregroundImage: '5-f.png',
     backgroundImage: '5-b.png',
-    lineImage: 'line-5.png',
     backgroundGradientAlignment: Alignment(0.25, 0),
     decorImages: [
       Decor(image: 'rocket.png', alignment: Alignment(-0.8, 1)),

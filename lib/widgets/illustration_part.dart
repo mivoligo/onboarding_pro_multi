@@ -93,15 +93,6 @@ class _SinglePageState extends State<_SinglePage>
         return Stack(
           alignment: Alignment.center,
           children: [
-            if (widget.currentStep.lineImage != null)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Image.asset(
-                  'assets/images/${widget.currentStep.lineImage}',
-                  fit: BoxFit.fitWidth,
-                  width: double.infinity,
-                ),
-              ),
             Positioned(
               width: min(constraints.maxWidth, constraints.maxHeight),
               height: min(constraints.maxWidth, constraints.maxHeight),
