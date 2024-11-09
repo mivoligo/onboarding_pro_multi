@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onboarding_pro_multi/colors.dart';
+import 'package:onboarding_pro_multi/utils/colors.dart';
 import 'package:onboarding_pro_multi/widgets/fancy_text.dart';
 
 class StepDescription extends StatelessWidget {

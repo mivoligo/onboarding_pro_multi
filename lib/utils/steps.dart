@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onboarding_pro_multi/step_model.dart';
-import 'package:onboarding_pro_multi/strings.dart';
+import 'package:onboarding_pro_multi/utils/strings.dart';
 
 const stepsList = [
   SingleStep(

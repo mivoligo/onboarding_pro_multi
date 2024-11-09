@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:onboarding_pro_multi/colors.dart';
+import 'package:onboarding_pro_multi/utils/colors.dart';
 import 'package:onboarding_pro_multi/home_page.dart';
 import 'package:onboarding_pro_multi/step_model.dart';
-import 'package:onboarding_pro_multi/steps.dart';
+import 'package:onboarding_pro_multi/utils/steps.dart';
 import 'package:onboarding_pro_multi/widgets/illustration_part.dart';
 import 'package:onboarding_pro_multi/widgets/navigation_part.dart';
 import 'package:onboarding_pro_multi/widgets/step_description.dart';

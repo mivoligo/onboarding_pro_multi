@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:onboarding_pro_multi/colors.dart';
+import 'package:onboarding_pro_multi/utils/colors.dart';
 import 'package:onboarding_pro_multi/onboarding_page.dart';
-import 'package:onboarding_pro_multi/strings.dart';
+import 'package:onboarding_pro_multi/utils/strings.dart';
 import 'package:onboarding_pro_multi/widgets/navigation_buttons.dart';
 
 class HomePage extends StatelessWidget {
