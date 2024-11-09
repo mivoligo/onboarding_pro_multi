@@ -123,14 +123,17 @@ class _SinglePageState extends State<_SinglePage>
             ),
             TweenAnimationBuilder(
               tween: Tween<double>(
-                begin: constraints.maxWidth,
-                end: 0,
+                begin: 0,
+                end: 1,
               ),
               duration: const Duration(milliseconds: 800),
               curve: Curves.easeOut,
               builder: (context, value, child) {
-                return Transform.translate(
-                  offset: Offset(value, 0),
+                return Transform(
+                  transform: Matrix4.identity()
+                    ..setEntry(3, 2, 0.001)
+                    ..rotateY(2 * pi * value),
+                  alignment: FractionalOffset.center,
                   child: child,
                 );
               },
